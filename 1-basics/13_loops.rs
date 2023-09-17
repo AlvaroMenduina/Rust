@@ -17,4 +17,10 @@ fn main(){
         }
     }
 
+    // More interestingly
+    for i in 5..10 {
+        let even_or_odd = if i % 2 == 0 {"even"} else {"odd"};
+        println!("Hey - this number {} is {}", i, even_or_odd);
+    }
+
 }
