@@ -62,3 +62,12 @@ whereas in Rust, the format is x = if *condition* *value* else *other_value*
 ```rust
 let even_or_odd = if i % 2 == 0 {"even"} else {"odd"};
 ```
+
+### Cannot know the type
+Apparently you cannot print the *type* of a variable in Rust at runtime, (somehow it's not available). A quick explanation here: (https://www.hackertouch.com/how-to-print-type-of-variable-in-rust.html)
+
+### No 'return' at the end of Functions
+In Rust you can get away with not adding a *return* statement at the end of the function, by default, it will return the value of the last expression
+
+### Taking 'string' as arguments to Functions
+Cool guide (http://xion.io/post/code/rust-string-args.html)
