@@ -1,0 +1,5 @@
+# Ignore all the .exe and .pdb
+*.exe
+*.pdb
+*/*.exe
+*/*.pdb
