@@ -29,6 +29,12 @@ fn other_abs(x : f64) -> f64 {
     res
 }
 
+fn factorial(n : u64) -> () {
+    // A function without return value is marked by (n : type) -> () and making sure there are no "expressions" without ;
+    println!("Reading the input '{}' for factorial", n);
+    // return or you can just add a 'return' like in Python
+}
+
 fn main(){
 
     let x = 2.0;
@@ -46,5 +52,8 @@ fn main(){
 
     // This is an interesting trick to avoid having to declare a specific variable to contain the result of the other function
     // Just use a 'pointer' to the result &other_abs(val)
-    println!("\nAbsolute Value of {} is {}", val, &other_abs(val));
+    println!("\nAbsolute Value of {} is {}", val, other_abs(val));
+
+    // Factorial
+    factorial(34);
 }

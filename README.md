@@ -71,3 +71,31 @@ In Rust you can get away with not adding a *return* statement at the end of the 
 
 ### Taking 'string' as arguments to Functions
 Cool guide (http://xion.io/post/code/rust-string-args.html)
+
+### Slicing does not make 'copies'
+Slicing in Rust uses *pointers* to the array like
+
+```rust
+let arr = [10, 20, 30, 40, 50, 60]; 
+let slice1 = &arr[0..1];
+```
+
+but slices do **not** make a copy of the data in the array, they all *borrow* the data from the declared arrays.
+The size of the arrays will be known at *compile* time, while the size of the slice will be known at *runtime*.
+
+### Static Methods in Rust vs Python
+
+You do not need to declare the method as "static" with the @decorator
+new_person.say_hi();        // This would work in Python but not in Rust
+Person::say_hi();           // In Rust, STATIC method cannot be called from an INSTANCE!
+
+```python
+class Calculator:
+    @staticmethod
+    def add_numbers(x, y):
+        return x, y
+
+calc = Calculator()
+res1 = calc.add_numbers(1, 2)        # This is acceptable in Python but not Rust
+res2 = Calculator.add_numbers(1, 2)     # This is the Rust equivalent, calling the static method from the Class without instance
+```
