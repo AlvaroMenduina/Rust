@@ -99,3 +99,44 @@ calc = Calculator()
 res1 = calc.add_numbers(1, 2)        # This is acceptable in Python but not Rust
 res2 = Calculator.add_numbers(1, 2)     # This is the Rust equivalent, calling the static method from the Class without instance
 ```
+
+### Initialising a class
+In Python, you don't need to tell which args correspond to what property
+
+```python
+class Person(object):
+    def __init__(self, age, height):
+        self.age = age
+        self.height = height
+
+p = Person(30, 180)
+```
+
+In Rust, you need to *explicitly* tell it the properties
+
+```rust
+struct Person<T> {
+    age: T,
+    height: T,
+}
+
+fn main(){
+
+    let p = Person{30, 180};        // This doesn't work
+    println!("Age: {}", p.age)
+}
+```
+
+Like this ```let p = Person{age:30, height:180};```
+
+### Generic types
+
+You might think that you could get away with this "{:?}" to avoid having to add ```impl<T: std::fmt::Display>``` but it will complain about not implementing debug
+
+```rust
+impl<T> Person<T> {
+    fn print_stats(&self){
+        println!("Age: {:?} | Height: {:?}", self.age, self.height)
+    }
+}
+```
