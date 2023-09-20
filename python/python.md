@@ -4,7 +4,7 @@ Some cool tricks to remember
 
 ## [1] Using ``argparse`` to parse arguments to a Python script
 When you want your code to depend on some parameters or options that you want to see in the command line,
-you can use the module ``argparse``.
+you can use the module ``argparse``. More details [here](https://docs.python.org/3/library/argparse.html).
 
 ```python
 import argparse
