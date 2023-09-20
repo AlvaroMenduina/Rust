@@ -2,6 +2,38 @@
 
 Some cool tricks to remember
 
+## Using ``argparse`` to parse arguments to a Python script
+When you want your code to depend on some parameters or options that you want to see in the command line,
+you can use the module ``argparse``.
+
+```python
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--my_option", type=str, help="[str] The string option that you need to run the code")
+args = parser.parse_args()
+
+option = args.my_option     ## The flag you defined becomes a name for the args property that your code can read
+```
+
+### Parsing paths to files
+If you need to read some files from within your script
+
+```python
+import json
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--my_file", type=argparse.FileType('r'), help="[str] The full path to the file to read")
+args = parser.parse_args()
+
+try:
+    with open(args.my_file) as f:
+        data = json.load(f)
+except FileNotFoundError:
+    print("There seems to be an error with the file")
+```
+
 ## Logging the Git commit ID of your code
 
 When you have a code that will evolve in the future, it may be important to understand what version of the code you used
