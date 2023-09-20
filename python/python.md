@@ -2,7 +2,7 @@
 
 Some cool tricks to remember
 
-## Using ``argparse`` to parse arguments to a Python script
+## [1] Using ``argparse`` to parse arguments to a Python script
 When you want your code to depend on some parameters or options that you want to see in the command line,
 you can use the module ``argparse``.
 
@@ -16,7 +16,12 @@ args = parser.parse_args()
 option = args.my_option     ## The flag you defined becomes a name for the args property that your code can read
 ```
 
-### Parsing paths to files
+An run your scripts as:
+```
+python my_script.py --my_option "like_this"
+```
+
+### [1.1] Parsing paths to files
 If you need to read some files from within your script
 
 ```python
@@ -34,7 +39,23 @@ except FileNotFoundError:
     print("There seems to be an error with the file")
 ```
 
-## Logging the Git commit ID of your code
+### [1.2] Making some arguments *optional*
+If you need to make some arguments *optional* and have some default values (for instance, if you want to ``--overwrite`` some file only if specified), you can define a ``default`` value. If you don't pass the flag, Python will assume the default value.
+
+```python
+import json
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--overwrite", type=bool, default=False, help="[bool] whether to overwrite the results")
+args = parser.parse_args()
+
+if args.overwrite:
+    ## Overwrite the results [...]
+    pass
+```
+
+## [2] Logging the Git commit ID of your code
 
 When you have a code that will evolve in the future, it may be important to understand what version of the code you used
 when you produced old results. 
@@ -67,3 +88,43 @@ if __name__ == __main__():
     ## Save the results ...
 
 ```
+
+## [3] Looping for data in a bunch of files
+Let's say you have a load of JSON files in your folder and want to check whether some 'data' is within any of them
+
+```python
+import os
+import json
+
+def search_for_data(data_to_match):
+
+    for root, _dirs, files in os.walk("./my_folder"):
+        for this_file in files:     # Loop over the available files
+            if this_file.startswith("results_"):        # Check if they start with the correct prefix
+                file_path = os.path.join(root, this_file)
+                with open(file_path, "r") as _file:     # Open the files and read the data
+                    _data = json.load(_file)
+                    for item in _data:      # Look for the data
+                        if item["x"] == data_to_match:      # Data in this file matches what we are looking for
+                            print(f"\nThis data '{data_to_match}' was found within '{file_path}'")
+                            return file_path
+    # Return None if you don't find anything
+    return None
+```
+
+## [4] The ``datetime`` module
+
+```python
+from datetime import datetime
+
+some_date = "2023-09-10"
+my_day = datetime.strptime(some_date, "%Y-%m-%d")       # Convert some string to a datetime instance
+
+one_day = datetime.timedelta(days=1)
+previous_day = my_date - one_day
+other_day = previous_day.strftime("%Y-%m-%d")           # Give a datetime instance a specific format
+```
+
+## [5] Adding ``logging``
+
+more to come
