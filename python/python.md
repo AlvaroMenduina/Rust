@@ -9,7 +9,7 @@ you can use the module ``argparse``. More details [here](https://docs.python.org
 ```python
 import argparse
 
-parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser(description="""This script does the following, using some data""")
 parser.add_argument("--my_option", type=str, help="[str] The string option that you need to run the code")
 args = parser.parse_args()
 
@@ -19,6 +19,13 @@ option = args.my_option     ## The flag you defined becomes a name for the args 
 An run your scripts as:
 ```
 python my_script.py --my_option "like_this"
+```
+
+If you are unsure of how the script works, or need a reminder, you can call for ``-h`` help.
+This will show you
+
+```
+python my_script.py -h
 ```
 
 ### [1.1] Parsing paths to files
@@ -127,4 +134,34 @@ other_day = previous_day.strftime("%Y-%m-%d")           # Give a datetime instan
 
 ## [5] Adding ``logging``
 
-more to come
+more to come now
+
+## [6] Scheduling python scripts on Linux
+
+```
+crontab -e
+```
+
+aa
+
+```
+30 8 * * * /bin/bash /home/user/scripts/run_python.sh
+```
+
+The bash script
+
+```
+#!/bin/bash
+
+folder_path = "/home/user/repo/"
+
+py_script = "/home/user/repo/analysis.py"
+
+timestamp = $(date + "%Y-%m-%d-%H%-M%S)
+log = "/home/user/repo/logs/log_sh_$timestamp.txt"
+
+cd "$folder_path" || exit 1     # Move to the folder with the sh
+
+/usr/bin/python3 "py_script" > "$log" 2>&1
+
+```
