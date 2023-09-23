@@ -58,6 +58,27 @@ let slice1 = &arr[0..1];
 but slices do **not** make a copy of the data in the array, they all *borrow* the data from the declared arrays.
 The size of the arrays will be known at *compile* time, while the size of the slice will be known at *runtime*.
 
+### [1.X] Using ``zip`` with iterators
+Zipping is a common operation with iterators. In Python, ``zip`` is a built-in function that takes as arguments as many iterators that need 
+zipping, an returns the pairwise collection.
+
+```python
+a = [0, 1, 2]
+b = [4, 5, 6]
+
+for i, j in zip(a, b):
+    print(i, j)
+```
+
+However in Rust the syntax can be different. You can either use ``use std::iter::zip`` to have the same format, or you can turn them into *iterables* and then *concatenate* the method ``.zip``. In other words: ``<some_vec>.iter().zip(<other_vec>.iter())
+```rust
+let a = vec![0, 1, 2];
+let b = vec![4, 5, 6];
+for (i, j) in a.iter().zip(b.iter()){
+    println!("{}, {}", i, j)
+}
+```
+
 ### [1.X] ``HashMap`` and ``dict``
 
 The ``HashMap`` in Rust is the equivalent of a Python dictionary ``dict``, a 'list' of things that are indexed via a *key* rather than an index. However, Rust has some specific behaviours that Python lacks:
