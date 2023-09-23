@@ -1,29 +1,28 @@
-## Rust - Learning notes
+# Rust - Learning notes
 
+This is a collection of notes about the ``rust`` language, especially focusing on a comparison with Python and notable differences.
 For details on how to install and run ``rust`` see [here](guide.md)
 
-## Vs Python
+# Rust vs Python
 
-Some things are slightly different in Rust than in Python
+Apart from the obvious differences between Rust and Python, there are some interesting variations on syntax or the approach to 
+Object Oriented Programming (OOP). Here we explore those differences with some examples:
 
 ### Print format
 
-In Rust, we use it like this: 
+In Rust, we use print like this, using a *macro* ``println!("<format_string>", print_arg)``:
 
 ```rust
 fn main(){
     let answer = 42;
-    println!("Hello {}", answer);
-    // The format is relatively similar to Python where you'd do:
-    //      
+    println!("Hello {}", answer);    
 }
 ```
 
-Compared to the Python equivalent
+Compared to the Python equivalents
 
 ```python
 print(f"Hello {answer}") or print("Hellow %s" % (answer))
-
 ```
 
 ### One-line declarations
@@ -59,25 +58,32 @@ let slice1 = &arr[0..1];
 but slices do **not** make a copy of the data in the array, they all *borrow* the data from the declared arrays.
 The size of the arrays will be known at *compile* time, while the size of the slice will be known at *runtime*.
 
-### Static Methods in Rust vs Python
+### [1.X] ``HashMap`` and ``dict``
 
-You do not need to declare the method as "static" with the @decorator
-new_person.say_hi();        // This would work in Python but not in Rust
-Person::say_hi();           // In Rust, STATIC method cannot be called from an INSTANCE!
+The ``HashMap`` in Rust is the equivalent of a Python dictionary ``dict``, a 'list' of things that are indexed via a *key* rather than an index. However, Rust has some specific behaviours that Python lacks:
+
+**Dictionaries must contain the same type**. This is unusual; Python can hold *anything* in a dictionary like this, with no regard to the 
+type each key is holding.
 
 ```python
-class Calculator:
-    @staticmethod
-    def add_numbers(x, y):
-        return x, y
-
-calc = Calculator()
-res1 = calc.add_numbers(1, 2)        # This is acceptable in Python but not Rust
-res2 = Calculator.add_numbers(1, 2)     # This is the Rust equivalent, calling the static method from the Class without instance
+my_dict = {}
+my_dict["name"] = "Alvaro"
+my_dict["age"] = 30
+my_dict["pets"] = ["cat", "dog"]
 ```
 
-### Initialising a class
-In Python, you don't need to tell which args correspond to what property
+This is not allowed in Rust. All the items must have the same type, to the point that you cannot even mix integers and floats!
+
+## [2] Object-Oriented Programming in Rust
+
+First of all, Rust does not use *inheritance* to define classes; it uses something called *composition* through the definition
+of **traits** and its **implementation**. 
+
+Other behaviours include
+
+### [2.1] Initialising a class
+In Python, you don't need to tell which args correspond to what property, it will infer it based on the order in which you declared
+the arguments for the ``__init__`` method. In the example below, it "knows" that 30 is the *age* and 180 is the *height*
 
 ```python
 class Person(object):
@@ -88,7 +94,7 @@ class Person(object):
 p = Person(30, 180)
 ```
 
-In Rust, you need to *explicitly* tell it the properties
+In Rust, you need to *explicitly* tell it the properties when initialising the class, like this ```let p = Person{age:30, height:180};```
 
 ```rust
 struct Person<T> {
@@ -103,7 +109,31 @@ fn main(){
 }
 ```
 
-Like this ```let p = Person{age:30, height:180};```
+### [2.2] Static Methods in Rust vs Python
+
+First of all, in Rust you do not need to **declare** the method as "static" with the decorator ``@staticmethod`` like Python.
+Whether a method is static is *inferred* by its relationship with ``self``. But perhaps more importantly, Rust is more strict on
+the ways static methods can be used. In Rust, you **cannot** call a static method from an *instance* of a class, you need to call it from
+the generic class like this:
+
+```rust
+new_person.say_hi();        // This would work in Python but not in Rust
+Person::say_hi();           // In Rust, STATIC method cannot be called from an INSTANCE!
+```
+
+Python is less strict with this. An instance of a class retains the static method and call be called without concerns:
+
+```python
+class Calculator:
+    @staticmethod
+    def add_numbers(x, y):
+        return x, y
+
+calc = Calculator()
+res1 = calc.add_numbers(1, 2)        # This is acceptable in Python but not Rust
+res2 = Calculator.add_numbers(1, 2)     # This is the Rust equivalent, calling the static method from the Class without instance
+```
+
 
 ### Generic types
 
