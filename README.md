@@ -8,7 +8,9 @@ For details on how to install and run ``rust`` see [here](guide.md)
 Apart from the obvious differences between Rust and Python, there are some interesting variations on syntax or the approach to 
 Object Oriented Programming (OOP). Here we explore those differences with some examples:
 
-### Print format
+## [1] Basics
+
+### [1.1] Print format
 
 In Rust, we use print like this, using a *macro* ``println!("<format_string>", print_arg)``:
 
@@ -25,7 +27,7 @@ Compared to the Python equivalents
 print(f"Hello {answer}") or print("Hellow %s" % (answer))
 ```
 
-### One-line declarations
+### [1.2] One-line declarations
 In Python we use one-line declarations like this x = *value* if *condition* else *other_value*
 
 ```python
@@ -38,11 +40,26 @@ whereas in Rust, the format is x = if *condition* *value* else *other_value*
 let even_or_odd = if i % 2 == 0 {"even"} else {"odd"};
 ```
 
-### Cannot know the type
+### [1.3] Cannot know the type
 Apparently you cannot print the *type* of a variable in Rust at runtime, (somehow it's not available). A quick explanation here: (https://www.hackertouch.com/how-to-print-type-of-variable-in-rust.html)
 
-### No 'return' at the end of Functions
+### [1.4] No 'return' at the end of Functions
 In Rust you can get away with not adding a *return* statement at the end of the function, by default, it will return the value of the last expression
+
+```rust
+fn add_numbers(x: i32, y: i32) -> i32 {
+    x + y           // This is the return
+}
+
+fn main(){
+    let x = 1;
+    let y = 2;
+    
+    let result = add_numbers(x, y);
+    println!("x({}) + y({}) = {}", x, y, result);
+}
+
+```
 
 ### Taking 'string' as arguments to Functions
 Cool guide (http://xion.io/post/code/rust-string-args.html)
@@ -70,13 +87,53 @@ for i, j in zip(a, b):
     print(i, j)
 ```
 
-However in Rust the syntax can be different. You can either use ``use std::iter::zip`` to have the same format, or you can turn them into *iterables* and then *concatenate* the method ``.zip``. In other words: ``<some_vec>.iter().zip(<other_vec>.iter())
+However in Rust the syntax can be different. You can either use ``use std::iter::zip`` to have the same format, or you can turn them into *iterables* and then *concatenate* the method ``.zip``. In other words: ``<some_vec>.iter().zip(<other_vec>.iter())``.
 ```rust
 let a = vec![0, 1, 2];
 let b = vec![4, 5, 6];
 for (i, j) in a.iter().zip(b.iter()){
     println!("{}, {}", i, j)
 }
+```
+
+## [2] Arrays, Vectors, Lists, Tuples
+
+### [2.1] Tuples and their indices
+
+Unlike arrays or ``HashMaps`` (aka dictionaries), tuples in Rust can contain different types. So in that sense, tuples are similar to Python. However, they have a different syntax for accessing their elements. In Python, the syntax is the same for *lists* and *tuples*:
+
+```python
+a = [0, 1, 2]
+print("a[0] = ", a[0])      # Accessing a list
+
+b = (3, 4, 5)
+print("b[0] = ", b[0])      # Accessing a tuple
+```
+
+Whereas in Rust, this is incorrect. To access the elements of a tuple, we have to use ``tup.0`` as if it was a *property* of the tuple
+
+```rust
+fn add_numbers(x : f64, y : f64) -> (f64, f64){
+    // This function takes a 'tuple' (x, y) and returns a 'tuple
+    (x + 1, x + 2)
+}
+
+fn main(){
+    let tup = add_mul(2.0, 10.0);
+    println!("t = {:?}", t);
+
+    // This is incorrect! tup[0] does not work
+    println!("t.0 = {}", tup[0]);
+}
+
+error[E0608]: cannot index into a value of type `(f64, f64)`
+  --> .\25_tuples.rs:13:26
+   |
+13 |     println!("t.0 = {}", t[0]);
+   |                          ^^^^ help: to access tuple elements, use: `t.0`
+
+error: aborting due to previous error
+
 ```
 
 ### [1.X] ``HashMap`` and ``dict``
@@ -88,7 +145,7 @@ type each key is holding.
 
 ```python
 my_dict = {}
-my_dict["name"] = "Alvaro"
+my_dict["name"] = "John"
 my_dict["age"] = 30
 my_dict["pets"] = ["cat", "dog"]
 ```

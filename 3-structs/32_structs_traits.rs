@@ -15,6 +15,7 @@ trait ViewStat {
     }
 }
 
+// This is saying: "the implementation of the trait ViewStat for the struct Person, only for types T that implement the 'Display' method"
 impl<T: std::fmt::Display> ViewStat for Person<T> {
     // This is saying, when the Type T HAS an implementation of std::fmt::Display,
     // the traits ViewStat is implemented as follows: by allowing print_stats

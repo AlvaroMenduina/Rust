@@ -165,3 +165,29 @@ cd "$folder_path" || exit 1     # Move to the folder with the sh
 /usr/bin/python3 "py_script" > "$log" 2>&1
 
 ```
+
+## [7] Re-loading modules in ``ipython``
+
+If you run code a lot using ``ipython`` and make changes to some module you are loading, it won't automatically reload. Rather than having to close the session and re-do all the time-consuming stuff like here:
+
+```python
+
+from my_utils import Analysis
+
+# /../ a lot of time-consuming code
+
+x = Analysis()
+
+```
+
+you can use the library ``importlib`` to *force* the reload of the ``my_utils``
+
+```python
+
+# Force python to reload the "my_utils"
+import importlib
+importlib.reload(my_utils)
+
+x = my_utils.Analysis()
+
+```
