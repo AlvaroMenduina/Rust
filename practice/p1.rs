@@ -1,5 +1,5 @@
+#![allow(dead_code, unused_variables)]
 // Some practice scripts in Rust
-
 // Trying to do the Zernike calculations
 
 struct Zernike {
@@ -18,41 +18,57 @@ impl Zernike {
     }
 
     fn get_limit_index(&mut self){
-        // self.n_lim = self.n_zern + 1;
         let y = (1 + 8*self.n_zern) as f32;
-        // println!("y={}", y);
         let sqrt_x = y.sqrt();
-        // println!("sq_y={}", sqrt_x);
         let ceil_x : f32 = 0.5 * (sqrt_x - 3.0);
-        // println!("ceil={}", ceil_x);
         self.n_lim = ceil_x.ceil() as i32;
         println!("n_lim={}", self.n_lim);
-        // n = int(np.ceil(0.5 * (np.sqrt(1 + 8*N) - 3)))
     }
 
-    fn z_nm(&self, mode: &str)-> f64{
+    fn z_nm(&self, n: i32, m: i32, rho: &[f64], theta: &[f64], mode: &str)-> Vec<f64>{
 
-        let r: f64 = match mode {
-            "Standard" => self.r_nm(),
-            "Jacobi" => self.r_nm_jacobi(),
+        let r: Vec<f64> = match mode {
+            "Standard" => self.r_nm(n, m, rho),
+            // "Jacobi" => self.r_nm_jacobi(),
             _ => {
                 println!("Unknown mode: {}", mode);
-                0.0
+                zeros_like(rho)
             }
             
         };
         r
     }
 
-    fn r_nm(&self)-> f64{
-        let r = 0.0;
-        r
+    fn r_nm(&self, n: i32, m: i32, rho: &[f64])-> Vec<f64>{
+
+        let n_abs = n.abs();
+        let m_abs = m.abs();
+        let mut r = zeros_like(rho);
+
+        if (n_abs - m_abs) % 2 != 0 {
+            r
+        } else{
+            // for j in range(int((n - m) / 2) + 1)
+            let max_idx = (n_abs - m_abs) / 2 + 1;
+            for j in 0..max_idx{
+                let exp = n_abs - 2 * j;
+                let poly: &[f64] = rho.iter().map(|&x| x.powei(exp)).collect();
+                r += poly;
+            }
+            r
+        }
+        
     }
 
-    fn r_nm_jacobi(&self)-> f64{
-        let r = 0.0;
-        r
-    }
+    // fn r_nm_jacobi(&self)-> f64{
+    //     let r = 0.0;
+    //     r
+    // }
+}
+
+fn zeros_like(arr: &[f64])-> Vec<f64>{
+    // A function that mimics Python np.zeros_like(x)
+    vec![0.0; arr.len()]
 }
 
 fn main(){
@@ -66,5 +82,8 @@ fn main(){
 
     println!("Len: {}", zern.n_zern);
     println!("N: {}", zern.n_lim);
+
+    let zeros = zeros_like(&coef);
+    println!("Zeros: {:?}", zeros);
 
 }
